@@ -7,25 +7,1176 @@ const path = require('path');
 app.set('view engine', 'pug');
 app.set('views', './views');
 
-const {Index: INDEXNAME, Properties: properties} = require('../jurisprudencia');
-const saveSearch = require('./save-search');
-const filterableProps = Object.entries(properties).filter(([_, obj]) => obj.type == 'keyword' || (obj.fields && obj.fields.keyword)).map( ([name, _]) => name).filter( o => o != "URL" && o != "UUID").concat("Votação")
-let DATA_FIELD = "Data";
-const aggs = {
-    MinAno: {
-        min: {
-            field: DATA_FIELD,
-            format: 'yyyy'
+const properties = {
+    "Afiliação Associativa Objecto" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
         }
+      }
     },
-    MaxAno: {
-        max: {
-            field: DATA_FIELD,
-            format: 'yyyy'
+    "Afiliação Associativa Texto" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
         }
+      }
+    },
+    "Ano de admissão" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Aposentação - Data" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Aposentação - Motivo" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Assinatura" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Assinatura Texto" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Assinatura URL" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Assinatura WikiCommons" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Até Data" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Avaliação" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Cargo" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Classificação" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Coordenadas" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Curso" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Cônjuge" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de Promoção" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de Readmissão" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de admissão" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de conclusão" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de desfiliação" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de encerramento" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de inicio" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de inscrição" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de inscrição Carteira Profissional" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de inscrição IGE" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Data de inscrição Previdência" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Deficiência" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Descendência" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Descrição" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Descrição de imagem" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Director (ISC) - Data de fim" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Director (ISC) - Data de inicio" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Direitos de Mercê" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Divida à saída" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Documentos oficiais" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Elementos de identificação ou distinção" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Empregador" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Especialidade" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Estado civil" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Fiador" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Filiação materna" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Filiação paterna" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Fonte" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Fontes externas" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Formação - Escola" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Função" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Id" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "Inabilidade - Data" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Inabilidade - Motivo" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Instituição" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Instrumento" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Local de Morte" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Local de admissão" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Local de nascimento" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Mapa URL" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Mapa WikiCommons" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Modo de Morte" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Modo de desfiliação" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Morte" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Músico Militar - Categoria" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Músico Militar - Ramo" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Nascimento" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Nome" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Nomes alternativos" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Número IGE" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Número de Carteira Profissional" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Número de Previdência" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Número de Sócio/ entrada" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Observações" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Outros números" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Pagamentos - Associação Afiliativa" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Posto" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Professor" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Profissão musical" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Profissão não musical" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Propriedade empresarial" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Registo de voz" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Religião" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Rendimentos" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Residência" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Retrato" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Retrato Texto" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Retrato Url" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Retrato WikiCommons" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Saldação de dívida" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Sexo" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Sócio Proponente" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Tipo de empresa" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Tipo de formação" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Tipologia" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Transcrição da Assinatura" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Título" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "URL" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Unidade Monetária" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
+    },
+    "Área Formativa" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "normalizer" : "term_normalizer"
+        },
+        "raw" : {
+          "type" : "keyword"
+        }
+      }
     }
 }
+const INDEXNAME = "proftmus.0.0"
+const filterableProps = Object.entries(properties).filter(([_, obj]) => obj.type == 'keyword' || (obj.fields && obj.fields.keyword)).map( ([name, _]) => name).filter( o => o != "URL" && o != "UUID")
+
+let aggs = {}
+
 filterableProps.forEach(name => {
+    console.log(name, properties[name])
     let key = properties[name].fields ? name + ".keyword" : name
     aggs[name] = {
         terms: {
@@ -37,27 +1188,8 @@ filterableProps.forEach(name => {
         }
     }
 });
-aggs["Votação"] = {
-    terms: {
-        field: "Votação.Forma.keyword",
-        size: 65536,
-        order: {
-            _term: "asc"
-        }
-    }
-}
 
-aggs["Tipo de Processo"] = aggs["Tipo"];
-delete aggs["Tipo"];
-aggs["Número de Processo"] = aggs["Processo"];
-delete aggs["Processo"];
-filterableProps[filterableProps.indexOf("Tipo")] = "Tipo de Processo";
-filterableProps[filterableProps.indexOf("Processo")] = "Número de Processo";
-
-const DEFAULT_AGGS = {
-    MaxAno : aggs.MaxAno,
-    MinAno : aggs.MinAno
-};
+const DEFAULT_AGGS = {};
 
 const RESULTS_PER_PAGE = 50;
 
@@ -100,8 +1232,7 @@ let search = (
     size: rpp,
     from: page*rpp,
     track_total_hits: true,
-    _source: filterableProps.concat("Sumário"),
-    fields: [DATA_FIELD],
+    _source: filterableProps,
     ...extras
 });
 
@@ -140,45 +1271,6 @@ const populateFilters = (filters, body={}, afters=["MinAno","MaxAno"]) => { // f
                 }
             });
         }
-    }
-
-    let dateWhen = "pre";
-    if( afters.indexOf("MinAno") >= 0 || afters.indexOf("MaxAno") >= 0 ) dateWhen = "after";
-    if( body.MinAno && body.MaxAno ){
-
-        filtersUsed.MinAno = body.MinAno;
-        filtersUsed.MaxAno = body.MaxAno;
-        filters[dateWhen].push({
-            range: {
-                [DATA_FIELD]: {
-                    gte: padZero(body.MinAno),
-                    lt: padZero((parseInt(body.MaxAno) || new Date().getFullYear())+1),
-                    format: "yyyy"
-                }
-            }
-        });
-    }
-    else if( body.MinAno ){
-        filtersUsed.MinAno = body.MinAno;
-        filters[dateWhen].push({
-            range: {
-                [DATA_FIELD]: {
-                    gte: padZero(body.MinAno),
-                    format: "yyyy"
-                }
-            }
-        });
-    }
-    else if( body.MaxAno ){
-        filtersUsed.MaxAno = body.MaxAno;
-        filters[dateWhen].push({
-            range: {
-                [DATA_FIELD]: {
-                    lt: padZero((parseInt(body.MaxAno) || new Date().getFullYear())+1),
-                    format: "yyyy"
-                }
-            }
-        });
     }
     if( body.notHasField ){
         filtersUsed.notHasField = (Array.isArray(body.notHasField) ? body.notHasField : [body.notHasField]).filter(o => o.length> 0);
@@ -225,29 +1317,6 @@ function queryString(originalUrl, drop=["page", "sort"]){
     return query.toString();
 }
 
-function parseSort(value, array){
-    const sortV = value || "score";
-    if( sortV == "des" ){
-        array.push({
-            [DATA_FIELD]: "desc"
-        });
-    }
-    else if( sortV == "asc" ){
-        array.push({
-            [DATA_FIELD]: "asc"
-        });
-    }
-    else if( sortV == "score" ){
-        array.push({
-            _score: "desc"
-        });
-        array.push({
-            [DATA_FIELD]: "desc"
-        })
-    }
-    return sortV;
-}
-
 let searchedArray = (string) => client.indices.analyze({
     index: INDEXNAME,
     text: string
@@ -279,31 +1348,17 @@ function titleCase(str){
 const tmp = app.render.bind(app);
 app.render = async (name, obj, next) => {
     let aggsGlobal = await allSearchAggPromise;
-    tmp(name, { aggsGlobal, titleCase, properties: filterableProps, requestStart: new Date(), ...obj, DATA_FIELD }, next);
+    tmp(name, { aggsGlobal, titleCase, properties: filterableProps, requestStart: new Date(), ...obj }, next);
 }
 
 // Returns page with filters
 app.get("/", (req, res) => {
     const sfilters = {pre: [], after: []};
     const filtersUsed = populateFilters(sfilters, req.query);
-    let sort = [];
-    let sortV = parseSort(req.query.sort, sort);
-    let sortE = true;
-    if( !req.query.q && !req.query.sort && Object.keys(filtersUsed).length == 0 ){
-        sort = [];
-        sortV = parseSort("des", sort);
-        sortE = false;
-    }
     let page = parseInt(req.query.page) || 0;
-    let searchId = saveSearch(queryString(req.originalUrl, [])).catch(e =>{
-        console.log(e);
-        return ""
-    });
-    search(queryObject(req.query.q), sfilters, page, DEFAULT_AGGS, 0, { sort }).then(async results => {
+    search(queryObject(req.query.q), sfilters, page, DEFAULT_AGGS, 0).then(async results => {
         res.render("search", {
             q: req.query.q, querystring: queryString(req.originalUrl),
-            sort: sortV,
-            sortEnabled: sortE,
             body: results,
             hits: results.hits.hits,
             aggs: results.aggregations,
@@ -311,15 +1366,12 @@ app.get("/", (req, res) => {
             page: page,
             pages: Math.ceil(results.hits.total.value/RESULTS_PER_PAGE),
             open: Object.keys(filtersUsed).length > 0,
-            searchedArray: await searchedArray(req.query.q),
-            searchId: await searchId
+            searchedArray: await searchedArray(req.query.q)
         });
     }).catch(async e => {
         console.log(e);
         res.render("search", {
             q: req.query.q, querystring: queryString(req.originalUrl),
-            sort: sortV,
-            sortEnabled: sortE,
             body: {},
             hits: [],
             aggs: {},
@@ -328,7 +1380,6 @@ app.get("/", (req, res) => {
             pages: 0,
             open: true,
             error: e,
-            searchId: await searchId,
             searchedArray: await searchedArray(req.query.q)
         });
     })
@@ -338,87 +1389,11 @@ app.get("/", (req, res) => {
 app.get("/acord-only", (req, res) => {
     const sfilters = {pre: [], after: []};
     populateFilters(sfilters, req.query);
-    const sort = [];
-    parseSort(req.query.sort, sort);
     let page = parseInt(req.query.page) || 0;
-    let highlight = {
-        fields: {
-            "Descritores": {
-                type: "unified",
-                highlight_query: {
-                    bool: {
-                        must: queryObject(req.query.q)
-                    }
-                },
-                pre_tags: [""],
-                post_tags: [""],
-                number_of_fragments: 0           
-            },
-            "Sumário": {
-                type: "fvh",
-                highlight_query: {
-                    bool: {
-                        must: queryObject(req.query.q)
-                    }
-                },
-                number_of_fragments: 0,
-                pre_tags: ["<mark>"],
-                post_tags: ["</mark>"]
-            },
-            "Texto": { 
-                type: "fvh",
-                highlight_query: {
-                    bool: {
-                        must: queryObject(req.query.q)
-                    }
-                },
-                number_of_fragments: 1000,
-                pre_tags: ["MARK_START"],
-                post_tags: ["MARK_END"]
-            }
-        },
-        max_analyzed_offset: 1000000
-    };
-    let searchId = saveSearch(queryString(req.originalUrl, [])).catch(e =>{
-        console.log(e);
-        return ""
-    });
-    search(queryObject(req.query.q), sfilters, page, {}, RESULTS_PER_PAGE, { sort, highlight, track_scores: true, _source:  [...Object.keys(properties), "Sumário", "Texto"] }).then( async results => {
-        searchArray = await searchedArray(req.query.q)
-        let colorFromText = (txt) => `var(--highlight-${searchArray.indexOf(txt.toLocaleLowerCase().trim())}, var(--primary-gold))`;
-        results.hits.hits.map( hit => {
-            if( !hit.highlight ) return
-            if( hit.highlight.Texto ){
-                for(let i = 0; i < hit.highlight.Texto.length; i++){
-                    let text = hit.highlight.Texto[i];
-                    let mat = text.match(/MARK_START(?<mat>.*?)MARK_END/).groups?.mat || "";
-                    hit.highlight.Texto[i] = {
-                        text: text.replace(/<[^>]+>/g, "").replace(/MARK_START/g, "<mark>").replace(/MARK_END/g, "</mark>").replace(/<\/?\w*$/, ""),
-                        offset: hit._source.Texto.indexOf(text.substring(0, text.indexOf("MARK_START"))),
-                        size: hit._source.Texto.length,
-                        color: colorFromText(mat)
-                    }
-                }
-                delete hit._source.Texto;
-            }
-            if( hit.highlight.Sumário ){
-                let it = hit.highlight.Sumário[0].matchAll(/[^>]{0,100}<mark>(?<mat>\w+)<\/mark>[^<]{0,100}/g)
-                hit.highlight.SumárioMarks = [];
-                for( let m of it ){
-                    let mat = m.groups?.mat || "";
-                    hit.highlight.SumárioMarks.push({
-                        text: m[0],
-                        offset: m.index,
-                        size: hit._source.Sumário.length,
-                        color: colorFromText(mat)
-                    });
-                }
-            }
-        })
+    search(queryObject(req.query.q), sfilters, page, {}, RESULTS_PER_PAGE).then( async results => {
         res.render("acord-article", {
             hits: results.hits.hits,
-            max_score: results.hits.max_score,
-            searchId: await searchId
+            max_score: results.hits.max_score
         });
     }).catch(e => {
         console.log(e);
@@ -429,100 +1404,16 @@ app.get("/acord-only", (req, res) => {
     });
 });
 
-/* TODO: redo statistics
-const statsAggs = {
-    MinAno: {
-        min: {
-            field: DATA_FIELD,
-            format: "yyyy"
-        }
-    },
-    MaxAno: {
-        max: {
-            field: DATA_FIELD,
-            format: "yyyy"
-        }
-    },
-    Anos: {
-        date_histogram: {
-            field: DATA_FIELD,
-            interval: 'year',
-            format: 'yyyy',
-            min_doc_count: 0
-        }
-    },
-    Origens: {
-        terms: {
-            field: 'Origem',
-            size: 20
-        }
-    },
-    "Secções": {
-        filters: {
-            filters: {
-                "Com secção": {
-                    exists: {
-                        field: "Secção"
-                    }
-                },
-                "Sem secção": {
-                    bool: {
-                        must_not: {
-                            exists: {
-                                field: "Secção"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-app.get("/estatisticas", (req, res) => {
-    const sfilters = {pre: [], after: []};
-    const filters = populateFilters(sfilters, req.query);
-    search(queryObject(req.query.q), sfilters, 0, DEFAULT_AGGS, 0, {}).then(body => {
-        res.render("stats", {q: req.query.q, querystring: queryString(req.originalUrl), body: body, aggs: body.aggregations, filters: filters, open: Object.keys(filters).length > 0});
-    }).catch(e => {
-        console.log(e);
-        res.render("stats", {q: req.query.q, querystring: queryString(req.originalUrl), body: {}, aggs: {}, filters: {}, open: true, error: e});
-    });
-});
-
-app.get("/allStats", (req, res) => {
-    const sfilters = {pre: [], after: []};
-    populateFilters(sfilters, req.query, []);
-    search(queryObject(req.query.q), sfilters, 0, statsAggs, 0 ).then(body => {
-        res.json(body.aggregations);
-    }).catch(err => {
-        console.log(req.originalUrl, JSON.stringify(err.body))
-        res.json({});
-    });
-});*/
-
 function listAggregation(term){
     return {
         MinAno: aggs.MinAno,
         MaxAno: aggs.MaxAno,
         [term]: {
             terms: {
-                field: aggs[term].terms.field.replace("keyword","raw"),
+                field: aggs[term].terms.field,
                 size: 65536/5,
                 order: {
                     _term: "asc",
-                }
-            },
-            aggs: {
-                MinAno: {
-                    min: {
-                        field: DATA_FIELD
-                    }
-                },
-                MaxAno: {
-                    max: {
-                        field: DATA_FIELD
-                    }
                 }
             }
         }
@@ -530,7 +1421,7 @@ function listAggregation(term){
 }
 
 app.get("/indices", (req, res) => {
-    const term = req.query.term || "Relator";
+    const term = req.query.term || "Nome";
     const fields = filterableProps;
     if( fields.indexOf(term) == -1 ){
         return res.render("list", {q: req.query.q, querystring: queryString(req.originalUrl), body: {}, error: `O campo "${term}" não foi indexado.`, aggs: {}, letters: {}, filters: {}, term: term, fields: fields})
@@ -571,72 +1462,8 @@ app.get("/indices.csv", (req, res) => {
     });
 })
 
-function histogramAggregation(key, value){
-    return {
-        MinAno: aggs.MinAno,
-        MaxAno: aggs.MaxAno,
-        Term: {
-            filter: {
-                term: {
-                    [aggs[key].terms.field]: value
-                }
-            },
-            aggs: {
-                MinAno: aggs.MinAno,
-                MaxAno: aggs.MaxAno,
-                Anos: {
-                    date_histogram: {
-                        "field": DATA_FIELD,
-                        "interval": "year",
-                        "format": "yyyy"
-                    }
-                }
-            }
-        }
-    }
-}
-
-app.get("/histogram", (req, res) => {
-    const term = req.query.term || "Relator";
-    const value = req.query.histogram_value;
-    const fields = filterableProps;
-    if( fields.indexOf(term) == -1 ){
-        return res.json()
-    }
-    const sfilters = {pre: [], after: []};
-    const filters = populateFilters(sfilters, req.query, []);
-    search(queryObject(req.query.q), sfilters, 0, histogramAggregation(term, value), 0).then( body => {
-        res.json(body.aggregations);
-    }).catch( err => {
-        res.json()
-    })
-
-})
-
-app.get("/related-:proc(*)", (req, res) => {
-    let proc = req.params.proc;
-    search({term: {UUID: proc}}, {pre:[], after:[]}, 0, {}, 1, {_source: ['Processo']}).then(async (body) => {
-        if( body.hits.total.value == 0 ) return [];
-        let processo = body.hits.hits[0]._source["Processo"];
-        let m = processo.match(/(?<base>[^/]+\/\w+\.\w+(-\w+)?)\./); 
-        if( !m ){
-            return [];
-        }
-        let related = await search({wildcard: {Processo: `${m.groups.base}*`}}, {pre:[], after:[]}, 0, {}, 100, {_source: ['Processo', "UUID", DATA_FIELD]});
-        return related.hits.hits.map( hit => ({
-            Processo: hit._source.Processo,
-            UUID: hit._source.UUID,
-            Data: hit._source[DATA_FIELD]
-        })).filter( hit => hit.UUID != proc);
-    }).then( l => res.json(l))
-})
-
+/*
 app.get("/acord-:proc(*)", (req, res) => {
-    if( req.query.search ){
-        saveSearch.trackClickedDocument(req.query.search, req.params.proc).catch(e => {
-            console.log(e);
-        });
-    }
     let proc = req.params.proc;
     search({term: {UUID: proc}}, {pre:[], after:[]}, 0, {}, 100, {_source: ['*'], fields: [DATA_FIELD]}).then((body) => {
         if( body.hits.total.value == 0 ){
@@ -663,44 +1490,7 @@ app.get("/acord-:proc(*)", (req, res) => {
         res.render("document", {proc, error: err});
     });
 });
-
-let spawn = require('child_process').spawn;
-function sendDocxOfHtml(res, html, name){
-    let docx = spawn("pandoc", ["-f", "html", "-t", "docx", "-o", "-"]);
-    docx.stdin.write(html);
-    docx.stdin.end();
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    res.setHeader('Content-Disposition', `attachment; filename=${name}.docx`);
-    docx.stdout.pipe(res);
-}
-
-app.get("/docx/acord-:proc(*)", (req, res) => {
-    let proc = req.params.proc;
-    search({term: {UUID: proc}}, {pre:[], after:[]}, 0, {}, 100, {_source: ['Texto'], fields: []}).then((body) => {
-        if( body.hits.total.value == 0 ){
-            res.render("document", {proc});
-        }
-        else if( body.hits.total.value == 1 ) {
-            sendDocxOfHtml(res, body.hits.hits[0]._source["Texto"], proc);
-        }
-        else{
-            let docnum = req.query.docnum;
-            if( !docnum ){
-                let html = ''
-                for( let i = 0; i < body.hits.hits.length; i++ ){
-                    html += `<li><a href=?docnum=${i}>Abrir documento ${i}</a></li>`
-                }
-                res.render("document", {proc, error: `<ul><p>More than one document found.</p>${html}</ul>`});
-            }
-            else{
-                sendDocxOfHtml(res, body.hits.hits[docnum]._source["Texto"], proc);
-            }
-        }
-    }).catch(err => {
-        console.log(req.originalUrl, err);
-        res.render("document", {proc, error: err});
-    });
-});
+*/
 
 app.get("/datalist", (req, res) => {
     let aggKey = req.query.agg;
@@ -718,24 +1508,19 @@ app.get("/datalist", (req, res) => {
     }
     let finalAgg = {
         terms: {
-            field: agg.terms.field.replace("keyword","raw"),
+            field: agg.terms.field,
             size: agg.terms.size
         }
     }
     const sfilters = {pre: [], after: []};
     populateFilters(sfilters, req.query, [aggKey]);
-    search(queryObject(req.query.q), sfilters, 0, { [aggKey]: finalAgg}, 10).then(body => {
+    search(queryObject(req.query.q), sfilters, 0, { [aggKey]: finalAgg}, 0).then(body => {
         res.render("datalist", {aggs: body.aggregations[aggKey].buckets, id: id});
     }).catch(err => {
         console.log(req.originalUrl, err.body.error);
         res.render("datalist", {aggs: [], error: err, id: id});
     });
 });
-
-app.get("/go/:searchId", async(req, res) => {
-    let params = await saveSearch.getShearchParams(req.params.searchId);
-    res.redirect(`../?${params}`);
-})
 
 app.use(express.static(path.join(__dirname, "static"), {extensions: ["html"]}));
 app.listen(parseInt(process.env.PORT) || 9100)

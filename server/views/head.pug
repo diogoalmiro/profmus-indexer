@@ -68,31 +68,13 @@ html(lang="en")
                                                                 span.d-block: i.bi-trash
                                         mixin filterlist(key)
                                             .d-flex.flex-column.my-1.border.pb-1
-                                                +await(`./datalist?id=datalist-${key}&agg=${key}&${querystring}`)
-                                                input.form-control.form-control-sm.border-0.border-bottom.rounded-0(type="text", name=key, autocomplete="off", list=`datalist-${key}`, placeholder=`${key}`,disabled)
+                                                +await(`./datalist?id=datalist-${encodeURIComponent(key)}&agg=${key}&${querystring}`)
+                                                input.form-control.form-control-sm.border-0.border-bottom.rounded-0(type="text", name=key, autocomplete="off", list=`datalist-${encodeURIComponent(key)}`, placeholder=`${key}`,disabled)
                                                 +usedFilters(key)
                                         .d-flex.flex-column.my-1
                                             input.form-control.form-control-sm.rounded-0(type="search", name="q", placeholder=`Texto Livre`, value=q||"")
-                                        .d-flex.my-1
-                                            .input-group.input-group-sm
-                                                .input-group-prepend.flex-shrink
-                                                    label.input-group-text.rounded-0.p-1(for="data_inicio") De:
-                                                input.form-control.form-control-sm.rounded-0.p-1(type="number", name="MinAno", min=aggsGlobal.MinAno.value_as_string, max=aggsGlobal.MaxAno.value_as_string, value=filters["MinAno"], step="1",placeholder=aggsGlobal.MinAno.value_as_string)#data_inicio
-                                            .input-group.input-group-sm
-                                                .input-group-prepend.flex-shrink
-                                                    label.input-group-text.rounded-0.p-1(for="data_fim") Até:
-                                                input.form-control.form-control-sm.rounded-0.p-1(type="number", name="MaxAno", min=aggsGlobal.MinAno.value_as_string, max=aggsGlobal.MaxAno.value_as_string, value=filters["MaxAno"], step="1",placeholder=aggsGlobal.MaxAno.value_as_string)#data_fim
-                                        +filterlist("Meio Processual")
-                                        if "Tipo de Processo" in filters
-                                            +filterlist("Tipo de Processo")
-                                        +filterlist("Número de Processo")
-                                        +filterlist("Secção")
-                                        +filterlist("Relator")
-                                        +filterlist("Votação")
-                                        +filterlist("Decisão")
-                                        +filterlist("Descritores")
-                                        //for p of properties
-                                            +filterlist(p)
+                                        for prop in properties
+                                            +filterlist(prop)
                                         +await(`./datalist?id=datalist-Campos&agg=Campos&${querystring}`)
                                         if "hasField" in filters
                                             .d-flex.flex-column.my-1.border.pb-1

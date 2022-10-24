@@ -43,17 +43,11 @@ block main
                             option(selected=op==term) !{op}
                     a.ms-1(href=`./indices.csv?${querystring}`): i.bi.bi-filetype-csv
                 th Quantidade Total
-                th Primeira Data
-                th Última Data
-                th Histograma
         tbody 
             for agg in aggs[term].buckets
                 tr
                     td: a(href=`./indices?${querystring}&${term}="${encodeURIComponent(agg.key)}"`) !{agg.key}
                     td !{agg.doc_count}
-                    td !{agg.MinAno.value_as_string}
-                    td !{agg.MaxAno.value_as_string}
-                    td: a(href="#histogram", data-bs-toggle="modal", data-bs-target="#modal-histogram", data-key=term, data-value=agg.key data-query=`./histogram?${querystring}&histogram_value=${encodeURIComponent(agg.key)}`) Ver
             
     script.
         document.getElementById("form-select").addEventListener("change", (e) => {
