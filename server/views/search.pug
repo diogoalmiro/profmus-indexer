@@ -41,7 +41,7 @@ block main
                         span.badge.bg-white.text-dark(style=`border: 3px solid var(--highlight-${i}, var(--primary-gold))`) !{term}
         include acord-article
         article.row(data-tribunal)#looking
-            h3 A receber processos...
+            h3 A receber registos...
             script.
                 let fetching = false;
                 let page = !{page};
@@ -57,7 +57,7 @@ block main
                                     end = new Date().getTime();
                                 } else {
                                     observer.disconnect();
-                                    document.querySelector("#looking").querySelector("h3").textContent = "Não há mais processos...";
+                                    document.querySelector("#looking").querySelector("h3").textContent = "Não há mais registos...";
                                 }
                                 observer.disconnect();
                                 entry.target.remove();
