@@ -18,7 +18,6 @@ block printpageinfo
 
 
 append form
-    input(type="hidden", name="sort", value=sortEnabled ? sort : "")#input-sort
     a(href="#top")
         i.bi.bi-chevron-up.mr-2
         | Voltar ao topo
@@ -35,12 +34,6 @@ block main
                 li Verifique o termo pesquisado
     else
         article
-            b.d-none.d-print-inline Ordenação:
-            b: select(name="sort").me-2#sort-select
-                option(value="score",selected=sort=="score") Relevância
-                option(value="asc",selected=sort=="asc") Data Ascendente
-                option(value="des",selected=sort=="des") Data Descendente
-            i.bi.bi-share(role="button",onclick=`navigator.share({url: "/go/${searchId}"})`)
             div.d-inline.float-end.d-print-none
                 if searchedArray.length > 0
                     | Termos da pesquisa destacados:&nbsp;

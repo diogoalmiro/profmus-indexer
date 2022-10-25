@@ -585,13 +585,8 @@ const properties = {
       }
     },
     "Id" : {
-      "type" : "text",
-      "fields" : {
-        "keyword" : {
-          "type" : "keyword",
-          "ignore_above" : 256
-        }
-      }
+      "type" : "keyword",
+      "normalizer" : "term_normalizer"
     },
     "Inabilidade - Data" : {
       "type" : "text",
@@ -1169,8 +1164,9 @@ const properties = {
         }
       }
     }
-}
-const INDEXNAME = "proftmus.0.0"
+};
+
+const INDEXNAME = "proftmus.0.1"
 const filterableProps = Object.entries(properties).filter(([_, obj]) => obj.type == 'keyword' || (obj.fields && obj.fields.keyword)).map( ([name, _]) => name).filter( o => o != "URL" && o != "UUID")
 
 let aggs = {}
@@ -1410,7 +1406,7 @@ function listAggregation(term){
         MaxAno: aggs.MaxAno,
         [term]: {
             terms: {
-                field: aggs[term].terms.field,
+                field: aggs[term].terms.field.replace("keyword","raw"),
                 size: 65536/5,
                 order: {
                     _term: "asc",
@@ -1462,35 +1458,21 @@ app.get("/indices.csv", (req, res) => {
     });
 })
 
-/*
-app.get("/acord-:proc(*)", (req, res) => {
-    let proc = req.params.proc;
-    search({term: {UUID: proc}}, {pre:[], after:[]}, 0, {}, 100, {_source: ['*'], fields: [DATA_FIELD]}).then((body) => {
+
+app.get("/Q:itemid(\\d+)", (req, res) => {
+    let itemId = req.params.itemid;
+    search({term: {Id: `Q${itemId}`}}, {pre:[], after:[]}, 0, {}, 100).then((body) => {
         if( body.hits.total.value == 0 ){
-            res.render("document", {proc});
-        }
-        else if( body.hits.total.value == 1 ) {
-            res.render("document", {proc, source: body.hits.hits[0]._source, fields: body.hits.hits[0].fields, aggs});
+            res.render("document", {itemId});
         }
         else{
-            let docnum = req.query.docnum;
-            if( !docnum ){
-                let html = ''
-                for( let i = 0; i < body.hits.hits.length; i++ ){
-                    html += `<li><a href=?docnum=${i}>Abrir documento ${i}</a></li>`
-                }
-                res.render("document", {proc, error: `<ul><p>More than one document found.</p>${html}</ul>`});
-            }
-            else{
-                res.render("document", {proc, source: body.hits.hits[docnum]._source, fields: body.hits.hits[docnum].fields, aggs});
-            }
+            res.render("document", {itemId, source: body.hits.hits[0]._source, fields: body.hits.hits[0].fields, aggs});
         }
     }).catch(err => {
         console.log(req.originalUrl, err);
-        res.render("document", {proc, error: err});
+        res.render("document", {itemId, error: err});
     });
 });
-*/
 
 app.get("/datalist", (req, res) => {
     let aggKey = req.query.agg;
@@ -1508,7 +1490,7 @@ app.get("/datalist", (req, res) => {
     }
     let finalAgg = {
         terms: {
-            field: agg.terms.field,
+            field: agg.terms.field.replace("keyword","raw"),
             size: agg.terms.size
         }
     }

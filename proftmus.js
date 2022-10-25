@@ -2,7 +2,7 @@ const es = require('@elastic/elasticsearch')
 const client = new es.Client({ node: process.env.ES_URL || 'http://localhost:9200' });
 const fetch = require('./util/fetch')
 
-const Index = module.exports.Index = "proftmus.0.0";
+const Index = module.exports.Index = "proftmus.0.1";
 const Properties = {
     'Id': {
         type: 'keyword',
@@ -29,12 +29,14 @@ let mapPropName = {};
                         type: "keyword",
                         normalizer: "term_normalizer"
                     }
-                },
-                fieldata: true
+                }
             }
         }
     }
-    await module.exports.create().catch( e => {})
+    await module.exports.create().catch( e => {
+        console.log(e.meta.body.error)
+        throw e
+    })
 
     let r = await fetch.json("https://profmus.fcsh.unl.pt/static/wiki/api.php?action=query&format=json&list=allpages&apnamespace=120&aplimit=500")
     do{
@@ -48,12 +50,21 @@ let mapPropName = {};
                 Id: id
             }
             for(let key in claims){
-                if( claims[key][0].mainsnak.datavalue.value.time ){
-                    obj[mapPropName[key]] = claims[key][0].mainsnak.datavalue.value.time;
+                let value = claims[key][0].mainsnak.datavalue.value;
+                if( claims[key][0].mainsnak.datavalue.type == "time" ){
+                    value = claims[key][0].mainsnak.datavalue.value.time;
                 }
-                else{
-                    obj[mapPropName[key]] = claims[key][0].mainsnak.datavalue.value;
+                addKeyValue(obj, mapPropName[key], value);
+                if( claims[key][0].qualifiers ){
+                    for( let qualifierKey in claims[key][0].qualifiers){
+                        let subvalue = claims[key][0].qualifiers[qualifierKey][0].datavalue.value;
+                        if( claims[key][0].qualifiers[qualifierKey][0].datavalue.type == "time" ){
+                            subvalue = claims[key][0].qualifiers[qualifierKey][0].datavalue.value.time;
+                        }
+                        addKeyValue(obj, mapPropName[qualifierKey], subvalue);
+                    }                            
                 }
+
             }
             await client.index({
                 index: module.exports.Index,
@@ -65,6 +76,14 @@ let mapPropName = {};
     while(r.continue.apcontinue);    
 })().catch(console.log)
 
+function addKeyValue(obj, key, value){
+    if( !(key in obj)){
+        obj[key] = [];
+    }
+    if( obj[key].indexOf(value) == -1 ){
+        obj[key].push(value);
+    }
+}
 
 /*const Properties = module.exports.Properties = {
     "Original": {

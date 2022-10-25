@@ -1,4 +1,4 @@
-datalist(id=id)
+datalist(id=encodeURIComponent(id))
     for agg in aggs 
         if agg.doc_count
             option(value=`${agg.key}`) Quantidade de processos: !{agg.doc_count}

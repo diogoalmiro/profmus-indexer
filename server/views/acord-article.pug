@@ -1,5 +1,12 @@
 for doc in hits
-    pre: code !{JSON.stringify(doc._source, null, "  ")}
+    article.row.border-top.result
+        .col-12.pt-1.d-flex
+            a(href=`./${doc._source["Id"]}`): b !{doc._source["Id"]}
+        for [key, value] of Object.entries(doc._source)
+            if key != "Id"
+                .col-12.pt-1.d-flex
+                    span <b>!{key}:</b> !{value.join(" / ")}
+
     //-article.row.border-top.result
         .col-12.pt-1.d-flex
             small.relevancia(style=`color: ${relevanciaColor(doc._score/max_score)}`)
