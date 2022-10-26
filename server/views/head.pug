@@ -69,11 +69,10 @@ html(lang="en")
                                         for prop in properties
                                             +filterlist(prop)
                                         +await(`./datalist?id=datalist-Campos&agg=Campos&${querystring}`)
-                                        if "hasField" in filters
+                                        if true
                                             .d-flex.flex-column.my-1.border.pb-1
                                                 input.form-control.form-control-sm.border-0.border-bottom.rounded-0(type="text", name="hasField", autocomplete="off", list=`datalist-Campos`, placeholder=`Tem de ter o campo`, disabled)
                                                 +usedFilters("hasField")
-                                        if "notHasField" in filters
                                             .d-flex.flex-column.my-1.border.pb-1
                                                 input.form-control.form-control-sm.border-0.border-bottom.rounded-0(type="text", name="notHasField", autocomplete="off", list=`datalist-Campos`, placeholder=`Não pode ter o campo`, disabled)
                                                 +usedFilters("notHasField")
