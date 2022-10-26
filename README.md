@@ -11,9 +11,9 @@
 
 ## Indexar wikimedia
 
-Para indexar a wikimedia usou-se a API que estas disponibiliza (Uma UI para a testarem (profmus.fcsh.unl.pt/static/wiki/index.php/Especial:ApiSandbox)[https://profmus.fcsh.unl.pt/static/wiki/index.php/Especial:ApiSandbox])
+Para indexar a wikimedia usou-se a API que estas disponibiliza (Uma UI para a testarem [profmus.fcsh.unl.pt/static/wiki/index.php/Especial:ApiSandbox](https://profmus.fcsh.unl.pt/static/wiki/index.php/Especial:ApiSandbox))
 
  - Listar propriedades: https://profmus.fcsh.unl.pt/static/wiki/api.php?action=query&format=json&prop=pageprops&list=allpages&apnamespace=122&aplimit=200
- - Receber o Nome das propriedades (até 50 de cada vez): https://profmus.fcsh.unl.pt/static/wiki/api.php?action=query&format=json&prop=entityterms&titles=PROP1|PROP2
+ - Receber o Nome das propriedades (até 50 de cada vez): https://profmus.fcsh.unl.pt/static/wiki/api.php?action=query&format=json&prop=entityterms&titles=Property:PXX1|Property:PXX2|...
  - Listar items (até 500 de cada vez): https://profmus.fcsh.unl.pt/static/wiki/api.php?action=query&format=json&list=allpages&apnamespace=120&aplimit=500
- - Obter a revisão de um item (para guardar os valores): https://profmus.fcsh.unl.pt/static/wiki/api.php?action=query&format=json&prop=revisions&rvprop=content&rvslots=main&titles=ITEM1
+ - Obter a revisão de um item (para guardar os valores): https://profmus.fcsh.unl.pt/static/wiki/api.php?action=query&format=json&prop=revisions&rvprop=content&rvslots=main&titles=Item:QXXX
