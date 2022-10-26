@@ -1,4 +1,12 @@
+# Passos
+
+  - Clonar este repositório
+  - Ter acesso a uma instancia de elasticsearch (para usar a já existente remota correr `ssh user@host -L 9200:localhost:9200` num terminal à parte)
+  - Instalar dependencias `npm i`
+  - Indexar a wikimedia `node proftmus.js` (Se o recurso já existir, este passo dá erro, mas pode ser ignorado)
+  - Correr a interface (entrar no diretório `server/` e correr `node server.js` )
 # Indexing
+
 
 If the index does not exist run `node jurisprudencia.js` to create it.
 

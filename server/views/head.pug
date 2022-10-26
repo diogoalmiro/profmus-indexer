@@ -19,7 +19,7 @@ html(lang="en")
                 nav.d-print-none
                     ul.container.d-flex.nav.align-items-center.justify-content-evenly.flex-wrap
                         li.nav-link.py-1.px-2.mx-1
-                            input(type="submit", formaction="./", value="Registos", form="filter-form",class=currentPage=="search"?"active":"").border-0.nav-link.fs-6.bg-transparent
+                            input(type="submit", formaction="./", value="Músicos", form="filter-form",class=currentPage=="search"?"active":"").border-0.nav-link.fs-6.bg-transparent
                         li.nav-link.py-1.px-2.mx-1
                             input(type="submit", formaction="./indices", value="Indíces", form="filter-form",class=currentPage=="list"?"active":"").border-0.nav-link.fs-6.bg-transparent
             .col-12.col-lg-6.d-none.d-print-block
@@ -43,7 +43,7 @@ html(lang="en")
                                                 if body 
                                                     b.d-inline.m-0                          
                                                         i.bi-archive 
-                                                        | !{body.hits.total.value} Registos        
+                                                        | !{body.hits.total.value} Músicos        
                                             if Object.keys(filters).length > 0 || q
                                                 a(href=`?q=`).text-danger.text-decoration-none
                                                     i.bi-eraser-fill
